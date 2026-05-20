@@ -103,7 +103,7 @@ export default function MapPage() {
           </div>
         </div>
 
-        <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
+        <div className="grid items-start gap-5 lg:grid-cols-[1fr_360px]">
           <MapView
             spots={spots}
             loading={loading}

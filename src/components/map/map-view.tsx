@@ -116,7 +116,7 @@ export function MapView({ spots, loading, onSelectSpot }: MapViewProps) {
   return (
     <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white">
       {spots.length === 0 && !loading ? (
-        <div className="flex h-[620px] items-center justify-center text-sm text-zinc-500">
+        <div className="flex h-[650px] items-center justify-center text-sm text-zinc-500">
           No spots with map coordinates yet.
         </div>
       ) : (
@@ -140,7 +140,7 @@ export function MapView({ spots, loading, onSelectSpot }: MapViewProps) {
             </select>
           </div>
 
-          <div ref={mapContainerRef} className="h-[620px] w-full" />
+          <div ref={mapContainerRef} className="h-[650px] w-full" />
         </>
       )}
     </div>
