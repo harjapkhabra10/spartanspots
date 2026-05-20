@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useEffect, useMemo, useState } from "react";
@@ -189,13 +188,13 @@ export default function HomePage() {
                 placeholder="Search by name, location, or keyword"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-11 flex-1 rounded-xl border border-zinc-200 bg-zinc-50 px-4 text-sm outline-none transition focus:border-emerald-600"
+                className="h-11 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 text-sm outline-none transition focus:border-emerald-600 md:flex-1"
               />
 
               <Popover>
                 <PopoverTrigger asChild>
                   <button
-                    className={`h-11 rounded-xl border px-4 text-sm font-medium transition ${
+                    className={`h-11 w-full rounded-xl border px-4 text-sm font-medium transition md:w-auto ${
                       selectedTags.length > 0
                         ? "border-emerald-700 bg-emerald-50 text-emerald-800"
                         : "border-zinc-200 bg-zinc-50 text-zinc-700 hover:border-zinc-300"
@@ -209,7 +208,7 @@ export default function HomePage() {
 
                 <PopoverContent
                   align="end"
-                  className="w-[340px] rounded-2xl border-zinc-200 p-4"
+                  className="w-[calc(100vw-3rem)] rounded-2xl border-zinc-200 p-4 sm:w-[340px]"
                 >
                   <div className="space-y-4">
                     <div>
@@ -263,7 +262,7 @@ export default function HomePage() {
               <button
                 onClick={clearFilters}
                 disabled={!hasActiveFilters}
-                className="h-11 rounded-xl bg-emerald-700 px-5 text-sm font-medium text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-50"
+                className="h-11 w-full rounded-xl bg-emerald-700 px-5 text-sm font-medium text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-50 md:w-auto"
               >
                 Clear
               </button>
