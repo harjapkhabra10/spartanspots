@@ -2,11 +2,30 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { supabase } from "@/lib/supabase";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import type { Tag } from "@/types/tag";
+import "./add-spot-form.css";
+
+const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "";
+const MSU_CENTER = { lng: -84.482, lat: 42.729 };
+const MSU_BBOX: [number, number, number, number] = [
+  -84.56, 42.68, -84.4, 42.78,
+];
+
+const SearchBox = dynamic(
+  () => import("@mapbox/search-js-react").then((mod) => mod.SearchBox),
+  { ssr: false }
+);
+
+type SelectedAddress = {
+  address: string;
+  latitude: number;
+  longitude: number;
+};
 
 export function AddSpotForm() {
   const router = useRouter();
@@ -14,6 +33,8 @@ export function AddSpotForm() {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [address, setAddress] = useState("");
+  const [selectedAddress, setSelectedAddress] =
+    useState<SelectedAddress | null>(null);
   const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -58,8 +79,41 @@ export function AddSpotForm() {
     );
   }
 
+  function handleAddressChange(value: string) {
+    setAddress(value);
+    if (addressError) setAddressError("");
+
+    if (selectedAddress && value !== selectedAddress.address) {
+      setSelectedAddress(null);
+    }
+  }
+
+  function handleAddressRetrieve(result: any) {
+    const feature = result.features[0];
+
+    if (!feature) return;
+
+    const { properties } = feature;
+    const coordinates = properties.coordinates;
+    const addressLabel =
+      properties.full_address ||
+      [properties.name, properties.place_formatted].filter(Boolean).join(", ");
+
+    setAddress(addressLabel);
+    setSelectedAddress({
+      address: addressLabel,
+      latitude: coordinates.latitude,
+      longitude: coordinates.longitude,
+    });
+    setAddressError("");
+
+    if (!location.trim()) {
+      setLocation(properties.name);
+    }
+  }
+
   async function geocodeAddress(address: string) {
-    const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+    const token = MAPBOX_TOKEN;
 
     if (!token || !address.trim()) {
       return { latitude: null, longitude: null };
@@ -140,12 +194,12 @@ export function AddSpotForm() {
     setAddressError("");
     setImageError("");
 
-    if (cleanedAddress.length < 8) {
+    if (cleanedAddress.length < 8 && !selectedAddress) {
       setAddressError("Please enter a more specific address.");
       return;
     }
 
-    if (!/\d/.test(cleanedAddress)) {
+    if (!/\d/.test(cleanedAddress) && !selectedAddress) {
       setAddressError("Include a street number, like 366 W Circle Dr.");
       return;
     }
@@ -158,10 +212,17 @@ export function AddSpotForm() {
     setSubmitting(true);
 
     const {
-      data: {user},
+      data: { user },
     } = await supabase.auth.getUser();
 
-    const { latitude, longitude } = await geocodeAddress(cleanedAddress);
+    const coordinates =
+      selectedAddress && selectedAddress.address === cleanedAddress
+        ? {
+            latitude: selectedAddress.latitude,
+            longitude: selectedAddress.longitude,
+          }
+        : await geocodeAddress(cleanedAddress);
+    const { latitude, longitude } = coordinates;
 
     if (latitude === null || longitude === null) {
       setAddressError("We could not find this address. Try a clearer one.");
@@ -170,10 +231,10 @@ export function AddSpotForm() {
     }
 
     const isNearMSU =
-      latitude >= 42.68 &&
-      latitude <= 42.78 &&
-      longitude >= -84.56 &&
-      longitude <= -84.40;
+      latitude >= 42.65 &&
+      latitude <= 42.80 &&
+      longitude >= -84.58 &&
+      longitude <= -84.35;
 
     if (!isNearMSU) {
       setAddressError("Please enter an address near MSU campus.");
@@ -235,6 +296,7 @@ export function AddSpotForm() {
     setName("");
     setLocation("");
     setAddress("");
+    setSelectedAddress(null);
     setDescription("");
     setImageFile(null);
     setHasOutlets(false);
@@ -282,20 +344,45 @@ export function AddSpotForm() {
           <label className="mb-2 block text-sm font-medium text-zinc-800">
             Address
           </label>
-          <Input
-            placeholder="e.g. 366 W Circle Dr, East Lansing, MI 48824"
-            value={address}
-            onChange={(e) => {
-              setAddress(e.target.value);
-              if (addressError) setAddressError("");
-            }}
-            required
-            className={`h-11 rounded-xl bg-white ${
-              addressError
-                ? "border-red-500 focus-visible:ring-red-500"
-                : "border-zinc-300"
-            }`}
-          />
+          {MAPBOX_TOKEN ? (
+            <div className="mapbox-searchbox">
+              <SearchBox
+                accessToken={MAPBOX_TOKEN}
+                value={address}
+                onChange={handleAddressChange}
+                onRetrieve={handleAddressRetrieve}
+                options={{
+                  language: "en",
+                  country: "US",
+                  proximity: MSU_CENTER,
+                  bbox: MSU_BBOX,
+                }}
+                placeholder="Search MSU buildings or addresses"
+                theme={{
+                  variables: {
+                    border:
+                      addressError ? "1px solid #ef4444" : "1px solid #d4d4d8",
+                    borderRadius: "0.75rem",
+                    boxShadow: "none",
+                    colorPrimary: "#047857",
+                    fontFamily: "inherit",
+                  },
+                }}
+              />
+            </div>
+          ) : (
+            <Input
+              placeholder="e.g. 366 W Circle Dr, East Lansing, MI 48824"
+              value={address}
+              onChange={(e) => handleAddressChange(e.target.value)}
+              required
+              className={`h-11 rounded-xl bg-white ${
+                addressError
+                  ? "border-red-500 focus-visible:ring-red-500"
+                  : "border-zinc-300"
+              }`}
+            />
+          )}
           {addressError && (
             <p className="mt-1 text-xs text-red-500">{addressError}</p>
           )}
