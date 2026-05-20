@@ -61,13 +61,6 @@ export function SiteHeader() {
             >
               Map
             </Link>
-
-            <Link
-              href="/focus"
-              className="text-sm font-medium text-zinc-600 transition hover:text-zinc-900"
-            >
-              Focus
-            </Link>
           </nav>
         </div>
 
