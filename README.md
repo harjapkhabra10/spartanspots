@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SpartanSpots
 
-## Getting Started
+SpartanSpots is a community-driven web application designed to help Michigan State University students discover, review, and share study spots around campus.
 
-First, run the development server:
+The platform combines interactive maps, peer reviews, live vibe updates, and active study sessions to help students quickly find an environment that matches how they like to study.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Mission
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+As a graduating senior at Michigan State University, I came to realize that I never truly found my “study spot.” Outside of my apartment and the engineering building, most study spaces I used throughout college were discovered through trial and error or word-of-mouth recommendations.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+SpartanSpots aims to make that process easier by giving students:
 
-## Learn More
+- A centralized platform for discovering study locations
+- Real student reviews and ratings
+- Interactive map-based exploration
+- Live information about current study environments
+- Community-submitted study spots and sessions
 
-To learn more about Next.js, take a look at the following resources:
+The goal is to create a more social, discoverable, and student-focused study experience at MSU.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Core Features
 
-## Deploy on Vercel
+## Explore Study Spots
+- Browse community-submitted study locations
+- View ratings, tags, amenities, and descriptions
+- Search and filter spots by name, location, or tags
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Interactive Map View
+- Discover study spots directly on a live Mapbox map
+- Click markers to preview locations
+- Explore study environments around campus visually
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Reviews & Ratings
+- Leave ratings and written reviews
+- View crowd level, quiet level, comfort, and overall ratings
+- See community feedback before visiting a location
+
+## Live Vibe Reports
+Students can submit quick vibe updates including:
+- Noise level
+- Crowd level
+- Outlet availability
+
+## Study Sessions
+- Create active study sessions tied to your account
+- Display what subject/course you are studying
+- Show available seats for others to join
+- End your own study session at any time
+
+## Add New Study Spots
+- Community-driven spot submissions
+- Address autocomplete powered by Mapbox
+- Image uploads through Supabase Storage
+- Automatic geocoding and map placement
+
+## Authentication
+- Supabase authentication
+- Logged-in users can create and manage their own content
+
+---
+
+# Tech Stack
+
+## Frontend
+- Next.js (App Router)
+- React
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+
+## Backend & Database
+- Supabase
+  - PostgreSQL database
+  - Authentication
+  - Storage
+  - Row Level Security (RLS)
+
+## Maps & Geolocation
+- Mapbox GL JS
+- Mapbox Search API
+
+## Deployment
+- Vercel
+
+---
+
+# Planned Features
+
+- Edit/delete reviews
+- Current user location on map
+- Directions to study spots
+- Saved/favorite study spots
+- Admin moderation queue for new spots
+
+---
+
+# Update Log
+
+## v0.1.0 — Initial Project MVP
+**Date:** May 2026
+
+### Added
+- 
+
+### Fixed
+- 
+
+---
+
+## v0.2.0 — 
+**Date:** 
+
+### Added
+- 
+
+### Fixed
+- 
