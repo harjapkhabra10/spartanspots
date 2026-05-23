@@ -90,11 +90,11 @@ Students can submit quick vibe updates including:
 
 # Planned Features
 
-- Edit/delete reviews
-- Current user location on map
-- Directions to study spots
-- Saved/favorite study spots
-- Admin moderation queue for new spots
+- Edit and delete functionality for user-owned reviews
+- Saved/favorite study spots for quick access
+- Admin moderation queue for approving newly submitted spots
+- Dedicated user profile pages
+- Expanded photo galleries for each study location
 
 ---
 
